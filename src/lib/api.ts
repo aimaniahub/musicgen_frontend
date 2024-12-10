@@ -1,6 +1,7 @@
 import axios, { AxiosError } from 'axios';
 
-const API_URL = 'https://65f9-34-142-177-236.ngrok-free.app';
+const API_URL = 'https://solely-generous-molly.ngrok-free.app';  // Updated ngrok URL
+
 
 interface MusicGenerationResponse {
   audio_path: string;
