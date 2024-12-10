@@ -50,12 +50,7 @@ export function Generator() {
     ]
 };
 
-  
-  // Example of usage for a specific genre (Rap)
-  const selectedGenre = 'rap';
-  const randomPrompt = genrePrompts[selectedGenre][Math.floor(Math.random() * genrePrompts[selectedGenre].length)];
-  console.log(randomPrompt);
-  
+  // Generate random prompt based on selected genre
   const generateRandomPrompt = () => {
     const prompts = genrePrompts[genre as keyof typeof genrePrompts];
     const randomPrompt = prompts[Math.floor(Math.random() * prompts.length)];
@@ -74,55 +69,52 @@ export function Generator() {
     setAudioUrl(null);
 
     try {
-      setIsGenerating(true);
-      setError('');
-      
-      const formData = new FormData();
-      formData.append('prompt', prompt);
-      formData.append('duration', duration.toString());
-      formData.append('genre', genre);
+      const requestBody = {
+        prompt: prompt,
+        duration: duration,
+        genre: genre
+      };
 
-      // Send POST request to backend to generate music
-      const response = await fetch('http://127.0.0.1:5000/generate', {
+      // Send POST request to backend API for music generation
+      const response = await fetch('https://2c66-34-142-177-236.ngrok-free.app/generate', {
         method: 'POST',
-        body: formData
+        headers: {
+          'Content-Type': 'application/json', // Set header to JSON
+        },
+        body: JSON.stringify(requestBody) // Send data as JSON
       });
 
-      // Check for successful response
       if (!response.ok) {
         throw new Error('Network response was not ok');
       }
 
       const result = await response.json();
-      
-      // Check if audio path is received
+
+      // Check if audio path is received and set audio URL
       if (result.audio_path) {
-        // Set audio URL to the generated music
-        setAudioUrl(`http://127.0.0.1:5000${result.audio_path}`);
+        setAudioUrl(`https://2c66-34-142-177-236.ngrok-free.app/generate${result.audio_path}`);
       } else {
         throw new Error('No audio path received');
       }
     } catch (err) {
-      // Handle error (e.g., show error message)
+      // Handle error during generation
       setError(err instanceof Error ? err.message : 'Failed to generate music. Please try again.');
     } finally {
-      // Stop generating state
-      setIsGenerating(false);
+      setIsGenerating(false); // Stop loading state
     }
   };
 
   const handleDownload = () => {
     if (audioUrl) {
-      // Create a temporary link element for downloading the MP3 file
+      // Create a temporary link to download the generated music file
       const link = document.createElement('a');
       link.href = audioUrl;
-      link.download = `${genre}_music_${Date.now()}.mp3`; // Set the filename
+      link.download = `${genre}_music_${Date.now()}.mp3`; // Set filename dynamically
       document.body.appendChild(link);
-      link.click(); // Trigger the download
-      document.body.removeChild(link); // Clean up the link element
+      link.click(); // Trigger download
+      document.body.removeChild(link); // Clean up
     }
   };
-  
   return (
     <div className="min-h-screen bg-gray-900">
       <Navbar />
