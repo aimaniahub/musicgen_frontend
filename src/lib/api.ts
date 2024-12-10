@@ -2,7 +2,6 @@ import axios, { AxiosError } from 'axios';
 
 const API_URL = 'https://solely-generous-molly.ngrok-free.app';  // Updated ngrok URL
 
-
 interface MusicGenerationResponse {
   audio_path: string;
   error?: string;
@@ -14,14 +13,13 @@ export const generateMusic = async (prompt: string, duration: number): Promise<M
     formData.append('prompt', prompt);
     formData.append('duration', duration.toString());
 
-    // Set the proper headers to handle CORS in case Flask doesn't do it
+    // Make the request with the proper headers
     const response = await axios.post<MusicGenerationResponse>(`${API_URL}/generate`, formData, {
       headers: {
-        'Content-Type': 'multipart/form-data',
-        // You could add any other custom headers if needed
+        'Content-Type': 'multipart/form-data',  // Ensure correct content type for FormData
       },
-      // Uncomment the line below if you have CORS issues
-      // withCredentials: true, // If your backend needs credentials (cookies, auth)
+      // Optionally, add credentials if needed by the backend
+      // withCredentials: true,
     });
 
     return response.data;
