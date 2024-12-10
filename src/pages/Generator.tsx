@@ -76,8 +76,7 @@ export function Generator() {
       };
 
       // Send POST request to backend API for music generation
-      const response = await fetch('https://solely-generous-molly.ngrok-free.app');  // Updated ngrok URL
-', {
+      const response = await fetch('https://solely-generous-molly.ngrok-free.app',{
         method: 'POST',
         headers: {
           'Content-Type': 'application/json', // Set header to JSON
