@@ -76,7 +76,7 @@ export function Generator() {
       };
 
       // Send POST request to backend API for music generation
-      const response = await fetch('https://2c66-34-142-177-236.ngrok-free.app/generate', {
+      const response = await fetch('https://65f9-34-142-177-236.ngrok-free.app', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json', // Set header to JSON
@@ -92,7 +92,7 @@ export function Generator() {
 
       // Check if audio path is received and set audio URL
       if (result.audio_path) {
-        setAudioUrl(`https://2c66-34-142-177-236.ngrok-free.app/generate${result.audio_path}`);
+        setAudioUrl(`https://65f9-34-142-177-236.ngrok-free.app${result.audio_path}`);
       } else {
         throw new Error('No audio path received');
       }
